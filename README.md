@@ -6,9 +6,9 @@ A tool to analyze and troubleshoot a Go binary size.
 
 For more, see [this blog post](https://medium.com/@jondot/a-story-of-a-fat-go-binary-20edc6549b97#.bzaq4nol0)
 
-✅ Get a breakdown of all modules inside a binary
-✅ Supports Go 1.11 modules
-✅ Output as JSON for tracking and/or monitoring as part of CI
+✅ Get a breakdown of all modules inside a binary  
+✅ Supports Go 1.11 modules  
+✅ Output as JSON for tracking and/or monitoring as part of CI  
 
 
 ## Quick Start
