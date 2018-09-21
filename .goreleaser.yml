@@ -10,6 +10,12 @@ archive:
     windows: Windows
     386: i386
     amd64: x86_64
+brew:
+  github:
+    owner: jondot
+    name: homebrew-tap
+  homepage:  https://github.com/jondot/goweight
+  description: A tool to analyze Go binary and module weights
 checksum:
   name_template: 'checksums.txt'
 snapshot:
