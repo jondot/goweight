@@ -3,9 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"goweight/pkg"
 
-	"gopkg.in/alecthomas/kingpin.v2"
+	"github.com/jondot/goweight/pkg"
+
+	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
