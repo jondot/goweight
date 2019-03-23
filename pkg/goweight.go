@@ -48,6 +48,7 @@ type ModuleEntry struct {
 	SizeHuman string `json:"size_human"`
 }
 type GoWeight struct {
+	BuildArgs string
 }
 
 func NewGoWeight() *GoWeight {
@@ -55,7 +56,7 @@ func NewGoWeight() *GoWeight {
 }
 
 func (g *GoWeight) BuildCurrent() string {
-	return strings.Split(strings.TrimSpace(run("go build -work -a 2>&1")), "=")[1]
+	return strings.Split(strings.TrimSpace(run("go build "+g.BuildArgs+" -work -a 2>&1")), "=")[1]
 }
 func (g *GoWeight) Process(work string) []*ModuleEntry {
 

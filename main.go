@@ -17,12 +17,17 @@ var (
 
 var (
 	jsonOutput = kingpin.Flag("json", "Output json").Short('j').Bool()
+	buildTags  = kingpin.Flag("tags", "Build tags").String()
 )
 
 func main() {
 	kingpin.Version(fmt.Sprintf("%s (%s)", version, commit))
 	kingpin.Parse()
 	weight := pkg.NewGoWeight()
+	if *buildTags != "" {
+		weight.BuildArgs = "-tags " + *buildTags
+	}
+
 	work := weight.BuildCurrent()
 	modules := weight.Process(work)
 
