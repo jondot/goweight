@@ -56,7 +56,7 @@ func NewGoWeight() *GoWeight {
 }
 
 func (g *GoWeight) BuildCurrent() string {
-	return strings.Split(strings.TrimSpace(run("go build "+g.BuildArgs+" -work -a 2>&1")), "=")[1]
+	return strings.Split(strings.TrimSpace(run("go build -o goweight-bin-target "+g.BuildArgs+" -work -a 2>&1 && rm goweight-bin-target")), "=")[1]
 }
 func (g *GoWeight) Process(work string) []*ModuleEntry {
 
