@@ -16,8 +16,8 @@ import (
 
 var moduleRegex = regexp.MustCompile("packagefile (.*)=(.*)")
 
-func run(cmd string) string {
-	out, err := exec.Command("sh", "-c", cmd).Output()
+func run(cmd []string) string {
+	out, err := exec.Command(cmd[0], cmd[1:]...).CombinedOutput()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -48,15 +48,17 @@ type ModuleEntry struct {
 	SizeHuman string `json:"size_human"`
 }
 type GoWeight struct {
-	BuildArgs string
+	BuildCmd []string
 }
 
 func NewGoWeight() *GoWeight {
-	return &GoWeight{}
+	return &GoWeight{
+		BuildCmd: []string{"go", "build", "-work", "-a"},
+	}
 }
 
 func (g *GoWeight) BuildCurrent() string {
-	return strings.Split(strings.TrimSpace(run("go build "+g.BuildArgs+" -work -a 2>&1")), "=")[1]
+	return strings.Split(strings.TrimSpace(run(g.BuildCmd)), "=")[1]
 }
 func (g *GoWeight) Process(work string) []*ModuleEntry {
 
