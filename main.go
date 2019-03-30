@@ -25,7 +25,7 @@ func main() {
 	kingpin.Parse()
 	weight := pkg.NewGoWeight()
 	if *buildTags != "" {
-		weight.BuildArgs = "-tags " + *buildTags
+		weight.BuildCmd = append(weight.BuildCmd, "-tags", *buildTags)
 	}
 
 	work := weight.BuildCurrent()
