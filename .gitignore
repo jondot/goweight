@@ -2,3 +2,4 @@ autobrew
 vendor/
 dist/
 goweight
+.vscode/
