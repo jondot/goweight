@@ -21,6 +21,7 @@ func run(cmd []string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
+	os.Remove("goweight-bin-target")
 	return string(out)
 }
 
@@ -53,7 +54,7 @@ type GoWeight struct {
 
 func NewGoWeight() *GoWeight {
 	return &GoWeight{
-		BuildCmd: []string{"go", "build","-o", "goweight-bin-target", "-work", "-a"},
+		BuildCmd: []string{"go", "build", "-o", "goweight-bin-target", "-work", "-a"},
 	}
 }
 
