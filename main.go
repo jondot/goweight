@@ -18,6 +18,7 @@ var (
 var (
 	jsonOutput = kingpin.Flag("json", "Output json").Short('j').Bool()
 	buildTags  = kingpin.Flag("tags", "Build tags").String()
+	packages   = kingpin.Arg("packages", "Packages to build").String()
 )
 
 func main() {
@@ -26,6 +27,9 @@ func main() {
 	weight := pkg.NewGoWeight()
 	if *buildTags != "" {
 		weight.BuildCmd = append(weight.BuildCmd, "-tags", *buildTags)
+	}
+	if *packages != "" {
+		weight.BuildCmd = append(weight.BuildCmd, *packages)
 	}
 
 	work := weight.BuildCurrent()
