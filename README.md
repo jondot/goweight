@@ -16,6 +16,14 @@ For more, see [this blog post](https://medium.com/@jondot/a-story-of-a-fat-go-bi
 ### With Go Modules - Go 1.11 or higher
 
 ```
+$ go get github.com/jondot/goweight
+$ cd current-project
+$ goweight
+```
+
+### Without Go Modules - Before Go 1.11
+
+```
 $ git clone https://github.com/jondot/goweight
 $ cd goweight
 $ go install
@@ -24,13 +32,6 @@ $ cd current-project
 $ goweight
 ```
 
-### Without Go Modules - Before Go 1.11
-
-```
-$ go get github.com/jondot/goweight
-$ cd current-project
-$ goweight
-```
 
 As an example, here's what `goweight` has to say about itself:
 
