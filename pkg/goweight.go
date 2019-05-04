@@ -59,7 +59,8 @@ func NewGoWeight() *GoWeight {
 }
 
 func (g *GoWeight) BuildCurrent() string {
-	return strings.Split(strings.TrimSpace(run(g.BuildCmd)), "=")[1]
+	d := strings.Split(strings.TrimSpace(run(g.BuildCmd)), "\n")[0]
+	return strings.Split(strings.TrimSpace(d), "=")[1]
 }
 
 func (g *GoWeight) Process(work string) []*ModuleEntry {
