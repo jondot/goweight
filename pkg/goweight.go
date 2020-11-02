@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/dustin/go-humanize"
+	"github.com/jondot/goweight/pkg/humanize"
 	"github.com/mattn/go-zglob"
 )
 
