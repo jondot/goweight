@@ -2,11 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 
 	"github.com/jondot/goweight/pkg"
-
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
@@ -16,14 +15,22 @@ var (
 )
 
 var (
-	jsonOutput = kingpin.Flag("json", "Output json").Short('j').Bool()
-	buildTags  = kingpin.Flag("tags", "Build tags").String()
-	packages   = kingpin.Arg("packages", "Packages to build").String()
+	jsonOutput      = flag.Bool("json", false, "Output json")
+	jsonOutputShort = flag.Bool("j", false, "Output json")
+
+	buildTags = flag.String("tags", "", "Build tags")
+	packages  = flag.String("packages", "", "Packages to build")
+
+	showVersion = flag.Bool("version", false, "Shows version")
 )
 
 func main() {
-	kingpin.Version(fmt.Sprintf("%s (%s)", version, commit))
-	kingpin.Parse()
+	flag.Parse()
+	if *showVersion {
+		fmt.Printf("%s (%s)\n", version, commit)
+		return
+	}
+
 	weight := pkg.NewGoWeight()
 	if *buildTags != "" {
 		weight.BuildCmd = append(weight.BuildCmd, "-tags", *buildTags)
@@ -35,7 +42,7 @@ func main() {
 	work := weight.BuildCurrent()
 	modules := weight.Process(work)
 
-	if *jsonOutput {
+	if *jsonOutput || *jsonOutputShort {
 		m, _ := json.Marshal(modules)
 		fmt.Print(string(m))
 	} else {
