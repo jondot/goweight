@@ -5,12 +5,12 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
 
 	"github.com/jondot/goweight/pkg/humanize"
-	"github.com/mattn/go-zglob"
 )
 
 var moduleRegex = regexp.MustCompile("packagefile (.*)=(.*)")
@@ -63,8 +63,18 @@ func (g *GoWeight) BuildCurrent() string {
 }
 
 func (g *GoWeight) Process(work string) []*ModuleEntry {
+	var files []string
 
-	files, err := zglob.Glob(work + "**/importcfg")
+	err := filepath.Walk(work, func(path string, _ os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if filepath.Base(path) == "importcfg" {
+			files = append(files, path)
+		}
+		return nil
+	})
+
 	if err != nil {
 		log.Fatal(err)
 	}
