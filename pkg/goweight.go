@@ -5,13 +5,12 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
 
-	"github.com/dustin/go-humanize"
-	"github.com/mattn/go-zglob"
-	"github.com/thoas/go-funk"
+	"github.com/jondot/goweight/pkg/humanize"
 )
 
 var moduleRegex = regexp.MustCompile("packagefile (.*)=(.*)")
@@ -64,21 +63,72 @@ func (g *GoWeight) BuildCurrent() string {
 }
 
 func (g *GoWeight) Process(work string) []*ModuleEntry {
+	var files []string
 
-	files, err := zglob.Glob(work + "**/importcfg")
+	err := filepath.Walk(work, func(path string, _ os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if filepath.Base(path) == "importcfg" {
+			files = append(files, path)
+		}
+		return nil
+	})
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	allLines := funk.Uniq(funk.FlattenDeep(funk.Map(files, func(file string) []string {
-		f, err := ioutil.ReadFile(file)
-		if err != nil {
-			return []string{}
+	allLines := uniqLines(flattenSLices(filesLines(files)))
+	var modules []*ModuleEntry
+	for _, line := range allLines {
+		module := processModule(line)
+		if module == nil {
+			continue
 		}
-		return strings.Split(string(f), "\n")
-	})))
-	modules := funk.Compact(funk.Map(allLines, processModule)).([]*ModuleEntry)
+		modules = append(modules, module)
+	}
 	sort.Slice(modules, func(i, j int) bool { return modules[i].Size > modules[j].Size })
 
 	return modules
+}
+
+func uniqLines(lines []string) []string {
+	m := make(map[string]struct{})
+
+	var uniqLines []string
+
+	for _, line := range lines {
+		_, seen := m[line]
+		if !seen {
+			uniqLines = append(uniqLines, line)
+			m[line] = struct{}{}
+		}
+	}
+
+	return uniqLines
+}
+
+func flattenSLices(slice [][]string) []string {
+	var flatten []string
+	for _, s := range slice {
+		flatten = append(flatten, s...)
+	}
+	return flatten
+}
+
+func filesLines(files []string) [][]string {
+	var lines [][]string
+	for _, f := range files {
+		lines = append(lines, fileLines(f))
+	}
+	return lines
+}
+
+func fileLines(file string) []string {
+	f, err := ioutil.ReadFile(file)
+	if err != nil {
+		return []string{}
+	}
+	return strings.Split(string(f), "\n")
 }
