@@ -13,6 +13,14 @@ For more, see [this blog post](https://medium.com/@jondot/a-story-of-a-fat-go-bi
 
 ## Quick Start
 
+### With Go Install
+
+```
+$ go install github.com/jondot/goweight@latest
+$ cd current-project
+$ goweight
+```
+
 ### With Go Modules - Go 1.11 or higher
 
 ```
